@@ -1,7 +1,8 @@
 {
   "name": "@ghom/logger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
+  "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/typings/index.d.ts",
@@ -10,6 +11,7 @@
     "semi": false
   },
   "exports": {
+    "module": "./dist/esm/index.js",
     "import": "./dist/esm/index.js",
     "require": "./dist/cjs/index.js"
   },
