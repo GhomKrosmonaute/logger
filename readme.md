@@ -1,1 +1,1 @@
-# TypeScript KnexJS ORM & handler
+# TypeScript logger
