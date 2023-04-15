@@ -1,5 +1,6 @@
 import chalk from "chalk"
 import dayjs from "dayjs"
+
 import { BaseEventNames, EventEmitter } from "@ghom/event-emitter"
 
 export enum LoggerLevels {
