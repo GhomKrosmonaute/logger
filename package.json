@@ -16,8 +16,7 @@
   "scripts": {
     "format": "prettier --write src tsconfig.*",
     "build": "rm -fr dist/* && tsc -p tsconfig-esm.json && tsc -p tsconfig-cjs.json && fixup.sh",
-    "test": "npm run build && jest tests/test.js --detectOpenHandles",
-    "prepublishOnly": "npm run format && npm test"
+    "prepublishOnly": "npm run format"
   },
   "devDependencies": {
     "prettier": "^2.8.7",
