@@ -1,6 +1,6 @@
 {
   "name": "@ghom/logger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -16,7 +16,7 @@
   "scripts": {
     "format": "prettier --write src tsconfig.*",
     "build": "rm -fr dist/* && tsc -p tsconfig-esm.json && tsc -p tsconfig-cjs.json && fixup.sh",
-    "prepublishOnly": "npm run format"
+    "prepublishOnly": "npm run build && npm run format"
   },
   "devDependencies": {
     "prettier": "^2.8.7",
