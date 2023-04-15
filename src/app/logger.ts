@@ -12,13 +12,19 @@ export enum LoggerLevels {
 
 export type LoggerLevel = keyof typeof LoggerLevels
 
+export function loggerLevelName(level: LoggerLevels): LoggerLevel {
+  return Object.keys(LoggerLevels).find(
+    (key) => LoggerLevels[key as LoggerLevel] === level
+  ) as LoggerLevel
+}
+
 export const defaultLoggerPattern = (
   text: string,
   level: LoggerLevels,
   secondaryText?: string
 ) => {
   return `${chalk.grey(dayjs().format("DD/MM/YY HH:mm"))} ${chalk.hex(level)(
-    level.toUpperCase()
+    loggerLevelName(level)
   )}${
     secondaryText ? " " + chalk.magentaBright(`${secondaryText}`) : ""
   } ${text}`
@@ -35,7 +41,7 @@ export interface LoggerOptions {
 }
 
 export interface LoggerEventNames extends BaseEventNames {
-  log: [text: string, level?: LoggerLevel]
+  log: [level: LoggerLevel, text: string, withPattern: string]
 }
 
 export class Logger extends EventEmitter<LoggerEventNames> {
@@ -56,37 +62,44 @@ export class Logger extends EventEmitter<LoggerEventNames> {
   }
 
   public log(text: string) {
-    this.emit("log", text, "INFO").catch(this.onFailure)
+    const pattern = this.pattern(text, LoggerLevels.INFO, this.section)
 
-    console.log(this.pattern(text, LoggerLevels.INFO, this.section))
+    this.emit("log", "INFO", text, pattern).catch(this.onFailure)
+
+    console.log(pattern)
   }
 
   public error(text: string | Error, _path?: string, full?: boolean) {
+    const pattern = this.pattern(
+      text instanceof Error ? text.message.split("\n")[0] : text,
+      LoggerLevels.ERROR,
+      _path ?? this.section
+    )
+
     this.emit(
       "log",
+      "ERROR",
       text instanceof Error ? text.message : text,
-      "ERROR"
+      pattern
     ).catch(this.onFailure)
 
-    console.error(
-      this.pattern(
-        text instanceof Error ? text.message.split("\n")[0] : text,
-        LoggerLevels.ERROR,
-        _path ?? this.section
-      )
-    )
+    console.error(pattern)
     if (full && text instanceof Error) console.error(text)
   }
 
   public warn(text: string) {
-    this.emit("log", text, "WARN").catch(this.onFailure)
+    const pattern = this.pattern(text, LoggerLevels.WARN, this.section)
 
-    console.warn(this.pattern(text, LoggerLevels.WARN, this.section))
+    this.emit("log", "WARN", text, pattern).catch(this.onFailure)
+
+    console.warn(pattern)
   }
 
   public success(text: string) {
-    this.emit("log", text, "SUCCESS").catch(this.onFailure)
+    const pattern = this.pattern(text, LoggerLevels.SUCCESS, this.section)
 
-    console.log(this.pattern(text, LoggerLevels.SUCCESS, this.section))
+    this.emit("log", "SUCCESS", text, pattern).catch(this.onFailure)
+
+    console.log(pattern)
   }
 }

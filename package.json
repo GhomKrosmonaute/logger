@@ -1,26 +1,27 @@
 {
   "name": "@ghom/logger",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "license": "MIT",
   "type": "module",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/esm/index.js",
   "types": "dist/typings/index.d.ts",
   "description": "TypeScript logger",
   "prettier": {
     "semi": false
   },
   "exports": {
-    "module": "./dist/esm/index.js",
     "import": "./dist/esm/index.js",
     "require": "./dist/cjs/index.js"
   },
   "scripts": {
     "format": "prettier --write src tsconfig.*",
     "build": "rm -fr dist/* && tsc -p tsconfig-esm.json && tsc -p tsconfig-cjs.json && fixup.sh",
-    "prepublishOnly": "npm run build && npm run format"
+    "test": "npm run build && node --experimental-vm-modules node_modules/jest/bin/jest.js tests/test.js --detectOpenHandles",
+    "prepublishOnly": "npm run format && npm test"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "jest": "^29.5.0",
     "prettier": "^2.8.7",
     "typescript": "^5.0.4"
   },
