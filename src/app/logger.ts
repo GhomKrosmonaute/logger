@@ -61,44 +61,65 @@ export class Logger extends EventEmitter<LoggerEventNames> {
     this.onFailure = options?.onFailure ?? console.error
   }
 
-  public log(text: string) {
+  public log(this: this, text: string) {
     const pattern = this.pattern(text, LoggerLevels.INFO, this.section)
 
-    this.emit("log", "INFO", text, pattern).catch(this.onFailure)
+    try {
+      this.emit("log", "INFO", text, pattern)
+    } catch (error: any) {
+      this.onFailure(error)
+    }
 
     console.log(pattern)
   }
 
-  public error(text: string | Error, _path?: string, full?: boolean) {
+  public error(
+    this: this,
+    text: string | Error,
+    _path?: string,
+    full?: boolean
+  ) {
     const pattern = this.pattern(
       text instanceof Error ? text.message.split("\n")[0] : text,
       LoggerLevels.ERROR,
       _path ?? this.section
     )
 
-    this.emit(
-      "log",
-      "ERROR",
-      text instanceof Error ? text.message : text,
-      pattern
-    ).catch(this.onFailure)
+    try {
+      this.emit(
+        "log",
+        "ERROR",
+        text instanceof Error ? text.message : text,
+        pattern
+      )
+    } catch (error: any) {
+      this.onFailure(error)
+    }
 
     console.error(pattern)
     if (full && text instanceof Error) console.error(text)
   }
 
-  public warn(text: string) {
+  public warn(this: this, text: string) {
     const pattern = this.pattern(text, LoggerLevels.WARN, this.section)
 
-    this.emit("log", "WARN", text, pattern).catch(this.onFailure)
+    try {
+      this.emit("log", "WARN", text, pattern)
+    } catch (error: any) {
+      this.onFailure(error)
+    }
 
     console.warn(pattern)
   }
 
-  public success(text: string) {
+  public success(this: this, text: string) {
     const pattern = this.pattern(text, LoggerLevels.SUCCESS, this.section)
 
-    this.emit("log", "SUCCESS", text, pattern).catch(this.onFailure)
+    try {
+      this.emit("log", "SUCCESS", text, pattern)
+    } catch (error: any) {
+      this.onFailure(error)
+    }
 
     console.log(pattern)
   }
