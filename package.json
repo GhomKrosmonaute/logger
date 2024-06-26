@@ -1,6 +1,6 @@
 {
   "name": "@ghom/logger",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "license": "MIT",
   "type": "module",
   "main": "dist/esm/index.js",
@@ -26,7 +26,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@ghom/event-emitter": "^1.2.0",
     "chalk": "=4.1.2",
     "dayjs": "^1.11.7"
   }

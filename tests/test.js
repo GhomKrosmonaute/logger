@@ -1,6 +1,17 @@
-import { logger, Logger } from "../"
+"use strict"
+
+import { logger, Logger, LoggerLevels } from "../"
 
 test("make logs", (done) => {
+  const logger = new Logger({
+    renders: {
+      [LoggerLevels.ERROR]: () => {},
+      [LoggerLevels.INFO]: () => {},
+      [LoggerLevels.SUCCESS]: () => {},
+      [LoggerLevels.WARN]: () => {}
+    }
+  })
+
   logger.log("info log")
   logger.warn("warn log")
   logger.error("error log")
@@ -12,16 +23,20 @@ test("make logs", (done) => {
 
 test("listen logs", (done) => {
   const logger = new Logger({
-    onFailure: (err) => {
-      done(err)
-    },
-  })
-
-  logger.on("log", (level, text, pattern) => {
-    expect(typeof text === "string").toBeTruthy()
-    expect(typeof level === "string").toBeTruthy()
-    expect(typeof pattern === "string").toBeTruthy()
-    expect(["info", "warn", "error", "success"]).toContain(level.toLowerCase())
+    renders: {
+      [LoggerLevels.ERROR]: (output) => {
+        expect(output).toContain("error log")
+      },
+      [LoggerLevels.INFO]: (output) => {
+        expect(output).toContain("info log")
+      },
+      [LoggerLevels.SUCCESS]: (output) => {
+        expect(output).toContain("success log")
+      },
+      [LoggerLevels.WARN]: (output) => {
+        expect(output).toContain("warn log")
+      }
+    }
   })
 
   logger.log("info log")
@@ -35,15 +50,21 @@ test("listen logs", (done) => {
 
 test("section logs", (done) => {
   const logger = new Logger({
-    section: "bonjour"
-  })
-
-  logger.on("log", (level, text, pattern) => {
-    expect(typeof text === "string").toBeTruthy()
-    expect(typeof level === "string").toBeTruthy()
-    expect(typeof pattern === "string").toBeTruthy()
-    expect(["info", "warn", "error", "success"]).toContain(level.toLowerCase())
-    expect(pattern.includes("bonjour")).toBeTruthy()
+    section: "bonjour",
+    renders: {
+      [LoggerLevels.ERROR]: (output) => {
+        expect(output).toContain("bonjour")
+      },
+      [LoggerLevels.INFO]: (output) => {
+        expect(output).toContain("bonjour")
+      },
+      [LoggerLevels.SUCCESS]: (output) => {
+        expect(output).toContain("bonjour")
+      },
+      [LoggerLevels.WARN]: (output) => {
+        expect(output).toContain("bonjour")
+      }
+    }
   })
 
   logger.log("info log")
@@ -57,15 +78,21 @@ test("section logs", (done) => {
 
 test("custom logs", (done) => {
   const logger = new Logger({
-    pattern: () => ""
-  })
-
-  logger.on("log", (level, text, pattern) => {
-    expect(typeof text === "string").toBeTruthy()
-    expect(typeof level === "string").toBeTruthy()
-    expect(typeof pattern === "string").toBeTruthy()
-    expect(["info", "warn", "error", "success"]).toContain(level.toLowerCase())
-    expect(pattern).toBe("")
+    pattern: () => "",
+    renders: {
+      [LoggerLevels.ERROR]: (output) => {
+        expect(output).toBe("")
+      },
+      [LoggerLevels.INFO]: (output) => {
+        expect(output).toBe("")
+      },
+      [LoggerLevels.SUCCESS]: (output) => {
+        expect(output).toBe("")
+      },
+      [LoggerLevels.WARN]: (output) => {
+        expect(output).toBe("")
+      }
+    }
   })
 
   logger.log("info log")
