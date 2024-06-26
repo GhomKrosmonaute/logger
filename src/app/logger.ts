@@ -96,7 +96,7 @@ export class Logger {
   ) {
     this.renders[LoggerLevels.ERROR](
       this.pattern(
-        text instanceof Error ? text.message.split("\n")[0] : text,
+        text instanceof Error ? text.message : text,
         { level: LoggerLevels.ERROR, colors: this.colors },
         _path ?? this.section
       )
