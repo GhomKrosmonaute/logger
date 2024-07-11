@@ -29,6 +29,14 @@ export function loggerLevelName(level: LoggerLevels): LoggerLevel {
   ) as LoggerLevel
 }
 
+export function formatLoggerLevelName(levelName: LoggerLevel): string {
+  const maxLength = Math.max(
+    ...Object.keys(LoggerLevels).map((key) => key.length)
+  )
+
+  return levelName.padStart(maxLength, " ")
+}
+
 export const defaultLoggerPattern: LoggerPattern = (
   text,
   config,
@@ -36,7 +44,7 @@ export const defaultLoggerPattern: LoggerPattern = (
 ) => {
   return `${chalk.grey(dayjs().format("DD/MM/YY HH:mm"))} ${chalk.hex(
     config.colors[config.level]
-  )(loggerLevelName(config.level))}${
+  )(formatLoggerLevelName(loggerLevelName(config.level)))}${
     secondaryText
       ? " " + chalk.hex(config.colors.secondaryText)(`${secondaryText}`)
       : ""
